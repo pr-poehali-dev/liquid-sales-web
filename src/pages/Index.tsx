@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import CheckoutForm, { type OrderData } from "@/components/CheckoutForm";
 
 type Product = {
   id: number;
@@ -45,6 +46,7 @@ const Index = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
 
   const brands = Array.from(new Set(products.map(p => p.brand)));
   const types = Array.from(new Set(products.map(p => p.type)));
@@ -109,6 +111,17 @@ const Index = () => {
   const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  const handleCheckout = (orderData: OrderData) => {
+    console.log("Order submitted:", { orderData, cart, total: cartTotal });
+    toast({
+      title: "Заказ оформлен!",
+      description: `Заказ на сумму ${cartTotal} ₽ принят в обработку. Мы свяжемся с вами в ближайшее время.`,
+    });
+    setCart([]);
+    setShowCheckout(false);
+    setIsCartOpen(false);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border/50 bg-background/80 backdrop-blur-md sticky top-0 z-50">
@@ -139,14 +152,16 @@ const Index = () => {
                   )}
                 </Button>
               </SheetTrigger>
-              <SheetContent className="w-full sm:max-w-lg">
-                <SheetHeader>
-                  <SheetTitle className="flex items-center gap-2">
-                    <Icon name="ShoppingCart" className="text-primary" size={24} />
-                    Корзина
-                  </SheetTitle>
-                </SheetHeader>
-                <div className="flex flex-col h-full pt-6">
+              <SheetContent className="w-full sm:max-w-lg overflow-auto">
+                {!showCheckout ? (
+                  <>
+                    <SheetHeader>
+                      <SheetTitle className="flex items-center gap-2">
+                        <Icon name="ShoppingCart" className="text-primary" size={24} />
+                        Корзина
+                      </SheetTitle>
+                    </SheetHeader>
+                    <div className="flex flex-col h-full pt-6">
                   {cart.length === 0 ? (
                     <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
                       <Icon name="ShoppingCart" size={64} className="text-muted-foreground mb-4" />
@@ -207,7 +222,11 @@ const Index = () => {
                           <span className="font-semibold">Итого:</span>
                           <span className="text-2xl font-bold text-primary">{cartTotal} ₽</span>
                         </div>
-                        <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" size="lg">
+                        <Button 
+                          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" 
+                          size="lg"
+                          onClick={() => setShowCheckout(true)}
+                        >
                           <Icon name="CreditCard" className="mr-2" size={20} />
                           Оформить заказ
                         </Button>
@@ -215,6 +234,16 @@ const Index = () => {
                     </>
                   )}
                 </div>
+                  </>
+                ) : (
+                  <div className="py-6">
+                    <CheckoutForm 
+                      cartTotal={cartTotal} 
+                      onSubmit={handleCheckout}
+                      onBack={() => setShowCheckout(false)}
+                    />
+                  </div>
+                )}
               </SheetContent>
             </Sheet>
           </div>
