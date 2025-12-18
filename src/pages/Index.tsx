@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
 
 type Product = {
   id: number;
@@ -16,6 +19,10 @@ type Product = {
   price: number;
   image: string;
   popular?: boolean;
+};
+
+type CartItem = Product & {
+  quantity: number;
 };
 
 const products: Product[] = [
@@ -30,11 +37,14 @@ const products: Product[] = [
 ];
 
 const Index = () => {
+  const { toast } = useToast();
   const [priceRange, setPriceRange] = useState([500, 5000]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [nicotineFilter, setNicotineFilter] = useState<string>("all");
   const [showFilters, setShowFilters] = useState(false);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const brands = Array.from(new Set(products.map(p => p.brand)));
   const types = Array.from(new Set(products.map(p => p.type)));
@@ -64,6 +74,41 @@ const Index = () => {
     return matchPrice && matchBrand && matchType && matchNicotine;
   });
 
+  const addToCart = (product: Product) => {
+    setCart(prev => {
+      const existing = prev.find(item => item.id === product.id);
+      if (existing) {
+        return prev.map(item => 
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
+    toast({
+      title: "Товар добавлен в корзину",
+      description: product.name,
+    });
+  };
+
+  const removeFromCart = (productId: number) => {
+    setCart(prev => prev.filter(item => item.id !== productId));
+  };
+
+  const updateQuantity = (productId: number, quantity: number) => {
+    if (quantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+    setCart(prev => 
+      prev.map(item => 
+        item.id === productId ? { ...item, quantity } : item
+      )
+    );
+  };
+
+  const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border/50 bg-background/80 backdrop-blur-md sticky top-0 z-50">
@@ -83,9 +128,95 @@ const Index = () => {
             <Button variant="ghost" size="icon">
               <Icon name="Search" size={20} />
             </Button>
-            <Button variant="ghost" size="icon">
-              <Icon name="ShoppingCart" size={20} />
-            </Button>
+            <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative">
+                  <Icon name="ShoppingCart" size={20} />
+                  {cartCount > 0 && (
+                    <Badge className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center p-0 text-xs bg-primary text-primary-foreground">
+                      {cartCount}
+                    </Badge>
+                  )}
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="w-full sm:max-w-lg">
+                <SheetHeader>
+                  <SheetTitle className="flex items-center gap-2">
+                    <Icon name="ShoppingCart" className="text-primary" size={24} />
+                    Корзина
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-col h-full pt-6">
+                  {cart.length === 0 ? (
+                    <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
+                      <Icon name="ShoppingCart" size={64} className="text-muted-foreground mb-4" />
+                      <h4 className="text-lg font-semibold mb-2">Корзина пуста</h4>
+                      <p className="text-sm text-muted-foreground">Добавьте товары из каталога</p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex-1 overflow-auto -mx-6 px-6 space-y-4">
+                        {cart.map(item => (
+                          <Card key={item.id} className="border-border/50">
+                            <CardContent className="p-4">
+                              <div className="flex gap-4">
+                                <img src={item.image} alt={item.name} className="w-20 h-20 rounded object-cover" />
+                                <div className="flex-1 min-w-0">
+                                  <h5 className="font-semibold truncate">{item.name}</h5>
+                                  <p className="text-sm text-muted-foreground">{item.brand}</p>
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <Button
+                                      variant="outline"
+                                      size="icon"
+                                      className="h-7 w-7"
+                                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                    >
+                                      <Icon name="Minus" size={14} />
+                                    </Button>
+                                    <span className="text-sm font-medium w-8 text-center">{item.quantity}</span>
+                                    <Button
+                                      variant="outline"
+                                      size="icon"
+                                      className="h-7 w-7"
+                                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                    >
+                                      <Icon name="Plus" size={14} />
+                                    </Button>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-7 w-7 ml-auto text-destructive"
+                                      onClick={() => removeFromCart(item.id)}
+                                    >
+                                      <Icon name="Trash2" size={14} />
+                                    </Button>
+                                  </div>
+                                </div>
+                                <div className="text-right">
+                                  <div className="font-bold text-primary">{item.price * item.quantity} ₽</div>
+                                  <div className="text-xs text-muted-foreground">{item.price} ₽ × {item.quantity}</div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                      <div className="mt-6 space-y-4">
+                        <Separator />
+                        <div className="flex justify-between items-center text-lg">
+                          <span className="font-semibold">Итого:</span>
+                          <span className="text-2xl font-bold text-primary">{cartTotal} ₽</span>
+                        </div>
+                        <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" size="lg">
+                          <Icon name="CreditCard" className="mr-2" size={20} />
+                          Оформить заказ
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </header>
@@ -304,7 +435,7 @@ const Index = () => {
                       <div className="text-2xl font-bold text-primary">
                         {product.price} ₽
                       </div>
-                      <Button size="sm" className="bg-primary hover:bg-primary/90">
+                      <Button size="sm" className="bg-primary hover:bg-primary/90" onClick={() => addToCart(product)}>
                         <Icon name="ShoppingCart" size={16} className="mr-2" />
                         Купить
                       </Button>
