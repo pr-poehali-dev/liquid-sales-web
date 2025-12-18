@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import TelegramButton from "@/components/TelegramButton";
 
 type Product = {
   id: number;
@@ -190,14 +191,25 @@ const ProductDetail = () => {
               VapeGold
             </span>
           </div>
-          <Button 
-            variant="outline" 
-            onClick={() => navigate("/")}
-            className="gap-2"
-          >
-            <Icon name="ShoppingCart" size={20} />
-            Корзина
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              asChild
+            >
+              <a href="https://t.me/hamm0n" target="_blank" rel="noopener noreferrer">
+                <Icon name="MessageCircle" size={20} />
+              </a>
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={() => navigate("/")}
+              className="gap-2"
+            >
+              <Icon name="ShoppingCart" size={20} />
+              Корзина
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -373,6 +385,7 @@ const ProductDetail = () => {
           </div>
         </div>
       </main>
+      <TelegramButton />
     </div>
   );
 };

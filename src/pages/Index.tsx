@@ -11,6 +11,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import CheckoutForm, { type OrderData } from "@/components/CheckoutForm";
+import TelegramButton from "@/components/TelegramButton";
 
 type Product = {
   id: number;
@@ -140,8 +141,14 @@ const Index = () => {
             <a href="#about" className="text-foreground hover:text-primary transition-colors">О нас</a>
           </nav>
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon">
-              <Icon name="Search" size={20} />
+            <Button 
+              variant="ghost" 
+              size="icon"
+              asChild
+            >
+              <a href="https://t.me/hamm0n" target="_blank" rel="noopener noreferrer">
+                <Icon name="MessageCircle" size={20} />
+              </a>
             </Button>
             <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
               <SheetTrigger asChild>
@@ -493,6 +500,8 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      <TelegramButton />
 
       <footer className="border-t border-border/50 py-12 mt-16">
         <div className="container mx-auto px-4">
