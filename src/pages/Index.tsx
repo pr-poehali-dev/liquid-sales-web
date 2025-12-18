@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -38,6 +39,7 @@ const products: Product[] = [
 ];
 
 const Index = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [priceRange, setPriceRange] = useState([500, 5000]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -428,7 +430,7 @@ const Index = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredProducts.map(product => (
-                  <Card key={product.id} className="group overflow-hidden border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
+                  <Card key={product.id} className="group overflow-hidden border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 cursor-pointer" onClick={() => navigate(`/product/${product.id}`)}>
                     <div className="relative overflow-hidden aspect-square">
                       <img
                         src={product.image}
@@ -464,7 +466,14 @@ const Index = () => {
                       <div className="text-2xl font-bold text-primary">
                         {product.price} ₽
                       </div>
-                      <Button size="sm" className="bg-primary hover:bg-primary/90" onClick={() => addToCart(product)}>
+                      <Button 
+                        size="sm" 
+                        className="bg-primary hover:bg-primary/90" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addToCart(product);
+                        }}
+                      >
                         <Icon name="ShoppingCart" size={16} className="mr-2" />
                         Купить
                       </Button>
