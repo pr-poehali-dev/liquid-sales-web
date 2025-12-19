@@ -501,6 +501,94 @@ const Index = () => {
         </div>
       </section>
 
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Наша команда</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Профессионалы, которые помогут вам с выбором и ответят на все вопросы
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <Card className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="aspect-square overflow-hidden">
+                <img 
+                  src="https://cdn.poehali.dev/projects/65bef2c5-5592-4e17-b003-a82d8deb7699/files/afd31c87-3ca2-4497-aa83-141fc316ad98.jpg" 
+                  alt="Анна Смирнова"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <CardContent className="p-6 text-center">
+                <h3 className="text-xl font-bold mb-1">Анна Смирнова</h3>
+                <p className="text-primary font-medium mb-3">Менеджер по продажам</p>
+                <p className="text-sm text-muted-foreground">
+                  Помогу подобрать идеальный вейп под ваши предпочтения. Опыт работы 5 лет.
+                </p>
+                <div className="flex justify-center gap-3 mt-4">
+                  <Button variant="outline" size="sm" asChild>
+                    <a href="https://t.me/hamm0n" target="_blank" rel="noopener noreferrer">
+                      <Icon name="MessageCircle" size={16} className="mr-2" />
+                      Telegram
+                    </a>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="aspect-square overflow-hidden">
+                <img 
+                  src="https://cdn.poehali.dev/projects/65bef2c5-5592-4e17-b003-a82d8deb7699/files/67b79bc3-9769-4424-a331-04a46bf0bf7a.jpg" 
+                  alt="Дмитрий Коваль"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <CardContent className="p-6 text-center">
+                <h3 className="text-xl font-bold mb-1">Дмитрий Коваль</h3>
+                <p className="text-primary font-medium mb-3">Специалист по жидкостям</p>
+                <p className="text-sm text-muted-foreground">
+                  Эксперт в области вкусов и никотиновых смесей. Создаю идеальные сочетания.
+                </p>
+                <div className="flex justify-center gap-3 mt-4">
+                  <Button variant="outline" size="sm" asChild>
+                    <a href="https://t.me/hamm0n" target="_blank" rel="noopener noreferrer">
+                      <Icon name="MessageCircle" size={16} className="mr-2" />
+                      Telegram
+                    </a>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="aspect-square overflow-hidden">
+                <img 
+                  src="https://cdn.poehali.dev/projects/65bef2c5-5592-4e17-b003-a82d8deb7699/files/8020ccc5-8aae-476d-abc5-536e6c82abb2.jpg" 
+                  alt="Сергей Волков"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <CardContent className="p-6 text-center">
+                <h3 className="text-xl font-bold mb-1">Сергей Волков</h3>
+                <p className="text-primary font-medium mb-3">Технический консультант</p>
+                <p className="text-sm text-muted-foreground">
+                  Помогу разобраться с настройкой устройств и решу любые технические вопросы.
+                </p>
+                <div className="flex justify-center gap-3 mt-4">
+                  <Button variant="outline" size="sm" asChild>
+                    <a href="https://t.me/hamm0n" target="_blank" rel="noopener noreferrer">
+                      <Icon name="MessageCircle" size={16} className="mr-2" />
+                      Telegram
+                    </a>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       <TelegramButton />
 
       <footer className="border-t border-border/50 py-12 mt-16">
