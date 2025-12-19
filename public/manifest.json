@@ -1,0 +1,33 @@
+{
+  "name": "Smokyhuk — Премиум вейп магазин",
+  "short_name": "Smokyhuk",
+  "description": "Премиальные электронные сигареты и жидкости",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#FFD700",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://cdn.poehali.dev/projects/65bef2c5-5592-4e17-b003-a82d8deb7699/files/26db8289-35e7-4f7e-bfbd-200d42c2bb21.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn.poehali.dev/projects/65bef2c5-5592-4e17-b003-a82d8deb7699/files/26db8289-35e7-4f7e-bfbd-200d42c2bb21.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "screenshots": [
+    {
+      "src": "https://cdn.poehali.dev/projects/65bef2c5-5592-4e17-b003-a82d8deb7699/files/og-image-1766094171866.jpg",
+      "sizes": "4800x2520",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    }
+  ]
+}
